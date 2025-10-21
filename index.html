@@ -20,22 +20,29 @@
       --text: #e94744;
       --muted: #87b566;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --success: #47ffa5;
     }
     
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     
     html, body {
-      height: 100%;
-      margin: 0;
+      min-height: 100%;
       background: 
         radial-gradient(1200px 800px at 80% -20%, transparent 60%),
         radial-gradient(1000px 800px at -10% 110%, transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg-2));
       color: var(--text);
       font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      overflow: hidden;
+      overflow-x: hidden;
+    }
+    
+    body {
+      position: relative;
+      padding: 20px 0;
     }
     
     .grid {
@@ -49,6 +56,7 @@
         linear-gradient(90deg, var(--grid) 1px, transparent 1px);
       background-size: 40px 40px, 40px 40px;
       animation: pan 30s linear infinite;
+      z-index: 1;
     }
     
     @keyframes pan {
@@ -63,21 +71,24 @@
       pointer-events: none;
       opacity: .18;
       filter: drop-shadow(0 0 8px rgba(102, 227, 255, 0.5));
+      z-index: 1;
     }
     
     #matrix {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: .25;
+      opacity: .4;
+      z-index: 0;
     }
     
     .wrap {
       position: relative;
-      height: 100%;
       display: grid;
       place-items: center;
       padding: 24px;
+      min-height: 100vh;
+      z-index: 2;
     }
     
     .card {
@@ -88,6 +99,7 @@
       box-shadow: var(--shadow), 0 0 0 1px rgba(255, 255, 255, 0.1);
       overflow: hidden;
       position: relative;
+      margin: 40px 0;
     }
     
     .glow-ring {
@@ -133,12 +145,14 @@
       font-weight: 800;
       font-size: clamp(28px, 5vw, 48px);
       text-shadow: 0 1px 0 rgba(0,0,0,.3);
+      line-height: 1.2;
     }
     
     .subtitle {
       margin: 12px 28px 0;
       color: var(--muted);
       font-size: clamp(14px, 2.2vw, 18px);
+      line-height: 1.5;
     }
     
     .code {
@@ -152,6 +166,7 @@
       color: #c36744;
       position: relative;
       overflow: hidden;
+      line-height: 1.5;
     }
     
     .dots {
@@ -192,6 +207,9 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
+      flex: 1;
+      min-width: 140px;
+      justify-content: center;
     }
     
     button:hover {
@@ -218,6 +236,185 @@
       opacity: 0;
       pointer-events: none;
       will-change: transform, opacity;
+      z-index: 1000;
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .wrap {
+        padding: 16px;
+      }
+      
+      .card {
+        width: 100%;
+        border-radius: 18px;
+      }
+      
+      header, .title, .subtitle, .btns, .footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      
+      .code {
+        margin: 16px;
+        padding: 16px;
+        font-size: 12px;
+      }
+      
+      .btns {
+        flex-direction: column;
+      }
+      
+      button {
+        width: 100%;
+      }
+      
+      .title {
+        font-size: clamp(24px, 8vw, 36px);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .wrap {
+        padding: 12px;
+      }
+      
+      header {
+        padding-top: 24px;
+      }
+      
+      .code {
+        margin: 12px;
+        padding: 12px;
+        font-size: 11px;
+      }
+      
+      .dots {
+        top: 8px;
+        left: 10px;
+      }
+      
+      .dot {
+        width: 8px;
+        height: 8px;
+        box-shadow: 14px 0 0 #440624, 28px 0 0 #276984;
+      }
+    }
+    
+    /* Modern additions */
+    .floating-icons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .floating-icon {
+      position: absolute;
+      opacity: 0.1;
+      font-size: 24px;
+      animation: float 15s infinite linear;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+      }
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin: 20px 28px 0;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: progressFill 2s ease-out forwards;
+    }
+    
+    @keyframes progressFill {
+      to {
+        transform: scaleX(1);
+      }
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(15, 28, 61, 0.9);
+      backdrop-filter: blur(10px);
+      color: var(--success);
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    /* Additional content for scrolling */
+    .additional-content {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+    
+    .content-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+    
+    .content-card h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    
+    .content-card p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .content-card ul {
+      padding-left: 20px;
+      margin-top: 12px;
+    }
+    
+    .content-card li {
+      margin-bottom: 8px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -225,6 +422,8 @@
 <body>
   <canvas id="matrix"></canvas>
   <div class="grid"></div>
+  
+  <div class="floating-icons" id="floatingIcons"></div>
   
   <svg class="circuit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="none">
     <defs>
@@ -258,6 +457,10 @@
         Kamu resmi menaklukkan dasar-dasar <strong>coding</strong>. Dari error pertama sampai program pertama yang berhasil jalan - semua terbayar!
       </p>
       
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      
       <pre class="code">
         <div class="dots">
           <span class="dot"></span>
@@ -276,6 +479,51 @@
       </div>
     </div>
   </div>
+  
+  <div class="additional-content">
+    <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Langkah Selanjutnya dalam Perjalanan Coding-mu</h2>
+    
+    <div class="content-grid">
+      <div class="content-card">
+        <h3>💻 Tingkatkan Skill Teknis</h3>
+        <p>Eksplorasi teknologi dan framework yang sedang populer:</p>
+        <ul>
+          <li>React, Vue, atau Angular untuk frontend</li>
+          <li>Node.js, Python, atau Go untuk backend</li>
+          <li>Flutter atau React Native untuk mobile</li>
+          <li>Docker dan Kubernetes untuk deployment</li>
+        </ul>
+      </div>
+      
+      <div class="content-card">
+        <h3>🚀 Bangun Portfolio</h3>
+        <p>Proyek yang bisa kamu kerjakan untuk membangun portfolio:</p>
+        <ul>
+          <li>Aplikasi to-do list dengan fitur lengkap</li>
+          <li>Website portfolio pribadi</li>
+          <li>Aplikasi cuaca dengan API</li>
+          <li>Clone aplikasi populer (Twitter, Instagram, dll)</li>
+        </ul>
+      </div>
+      
+      <div class="content-card">
+        <h3>🌐 Bergabung dengan Komunitas</h3>
+        <p>Temukan komunitas coding untuk belajar bersama:</p>
+        <ul>
+          <li>GitHub - untuk kolaborasi proyek open source</li>
+          <li>Stack Overflow - untuk bertanya dan menjawab</li>
+          <li>Discord/Telegram groups - untuk diskusi real-time</li>
+          <li>Meetup lokal - untuk networking</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="font-size: 14px; color: var(--muted);">Terus belajar, terus mencoba, dan jangan pernah berhenti membuat sesuatu yang baru!</p>
+    </div>
+  </div>
+  
+  <div class="notification" id="notification">Teks berhasil disalin!</div>
   
   <script>
     let dimas = "Teman Hebat";
@@ -307,10 +555,24 @@ function nextJourney() {
     
     type();
     
+    // Floating icons
+    const floatingIconsEl = document.getElementById('floatingIcons');
+    const icons = ['</>', '{ }', ';', '[]', '=>', '()', '/*', '*/'];
+    
+    for (let j = 0; j < 15; j++) {
+      const icon = document.createElement('div');
+      icon.className = 'floating-icon';
+      icon.textContent = icons[Math.floor(Math.random() * icons.length)];
+      icon.style.left = Math.random() * 100 + 'vw';
+      icon.style.animationDelay = Math.random() * 5 + 's';
+      icon.style.animationDuration = (15 + Math.random() * 10) + 's';
+      floatingIconsEl.appendChild(icon);
+    }
+    
     document.getElementById('btnConfetti').addEventListener('click', throwConfetti);
     
     function throwConfetti() {
-      const colors = ['#66e3ff', '#47ffa5', '#fff3d2'];
+      const colors = ['#66e3ff', '#47ffa5', '#fff3d2', '#e847a8', '#66e344'];
       for (let j = 0; j < 80; j++) {
         const d = document.createElement('div');
         d.className = 'confetti';
@@ -340,14 +602,35 @@ function nextJourney() {
     
     document.getElementById('btnSalin').addEventListener('click', async () => {
       const teks = `Selamat, ${dimas}! 🎉\nKamu berhasil belajar coding, jangan berhenti berkarya!`;
-      await navigator.clipboard.writeText(teks);
-      alert("Ucapan disalin!");
+      try {
+        await navigator.clipboard.writeText(teks);
+        showNotification("Ucapan disalin!");
+      } catch (err) {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = teks;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        showNotification("Ucapan disalin!");
+      }
     });
     
-    // Matrix Rain
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Matrix Rain - Improved visibility
     const cvs = document.getElementById("matrix");
     const ctx = cvs.getContext("2d");
-    let fontSize = 16;
+    let fontSize = 18; // Increased font size for better visibility
     let cols, drops;
     
     function resize() {
@@ -365,12 +648,22 @@ function nextJourney() {
     function draw() {
       ctx.fillStyle = "rgba(11,16,32,0.08)";
       ctx.fillRect(0, 0, cvs.width, cvs.height);
-      ctx.font = fontSize + "px Fira Code";
+      ctx.font = `bold ${fontSize}px Fira Code`; // Added bold for better visibility
       
       for (let i = 0; i < drops.length; i++) {
         const text = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillStyle = Math.random() > .5 ? "#66e3ff" : "#47ffa5";
+        
+        // Create gradient for better visibility
+        const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, (drops[i] + 1) * fontSize);
+        gradient.addColorStop(0, Math.random() > .5 ? "#66e3ff" : "#47ffa5");
+        gradient.addColorStop(1, Math.random() > .5 ? "#e847a8" : "#66e344");
+        
+        ctx.fillStyle = gradient;
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        // Add glow effect
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = gradient;
         
         if (drops[i] * fontSize > cvs.height && Math.random() > .975) {
           drops[i] = 0;
